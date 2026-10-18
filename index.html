@@ -77,16 +77,53 @@
       width: 380px;
       background: #ffffff;
       border-left: 1px solid #cbd5e1;
-      padding: 18px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
       box-shadow: -4px 0 16px rgba(0,0,0,0.05);
       overflow-y: auto;
       z-index: 1000;
     }
+
+    /* নতুন যুক্ত করা: সারাদেশের সর্বমোট কার্ডের স্টাইল */
+    .national-total-card {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      color: #ffffff;
+      border-radius: 10px;
+      padding: 12px 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border: 1px solid #334155;
+    }
+    .national-total-card h3 {
+      font-size: 14.5px;
+      color: #f59e0b;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .national-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 12px;
+      font-size: 12px;
+    }
+    .national-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dotted #334155;
+      padding-bottom: 2px;
+    }
+    .national-val {
+      font-weight: 700;
+      color: #38bdf8;
+    }
+
     .filter-box {
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
     .filter-box select {
       width: 100%;
@@ -103,7 +140,7 @@
     .tab-group {
       display: flex;
       gap: 6px;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
     .tab-btn {
       flex: 1;
@@ -174,6 +211,52 @@
     <div id="map"></div>
 
     <div class="sidebar">
+      <!-- নতুন যুক্ত করা: সারাদেশের সর্বমোট তথ্য কার্ড -->
+      <div class="national-total-card">
+        <h3>
+          <span>সারাদেশে সর্বমোট হিসাব</span>
+          <span style="font-size: 11px; color: #94a3b8; font-weight: normal;">মোট তথ্য</span>
+        </h3>
+        <div class="national-grid">
+          <div class="national-item">
+            <span style="color:#cbd5e1;">মোট মন্ডপ:</span>
+            <span class="national-val" style="color:#f59e0b;">৩৩,১৯৭ টি</span>
+          </div>
+          <div class="national-item">
+            <span style="color:#cbd5e1;">স্থায়ী:</span>
+            <span class="national-val">২৩,৯৫৮ টি</span>
+          </div>
+          <div class="national-item">
+            <span style="color:#cbd5e1;">অস্থায়ী:</span>
+            <span class="national-val">৭,৫৫৪ টি</span>
+          </div>
+          <div class="national-item">
+            <span style="color:#cbd5e1;">পারিবারিক:</span>
+            <span class="national-val">১,৩৮৫ টি</span>
+          </div>
+          <div class="national-item">
+            <span style="color:#cbd5e1;">সিসিটিভি সচল:</span>
+            <span class="national-val" style="color:#4ade80;">২০,৭৯৬ টি</span>
+          </div>
+          <div class="national-item">
+            <span style="color:#cbd5e1;">সিসিটিভি অচল:</span>
+            <span class="national-val" style="color:#f87171;">১২,২১৪ টি</span>
+          </div>
+          <div class="national-item">
+            <span style="color:#cbd5e1;">অতি গুরুত্বপূর্ণ:</span>
+            <span class="national-val" style="color:#f87171;">২৯,৭৮৮ টি</span>
+          </div>
+          <div class="national-item">
+            <span style="color:#cbd5e1;">গুরুত্বপূর্ণ:</span>
+            <span class="national-val">৪৪,৩১৪ টি</span>
+          </div>
+          <div class="national-item" style="grid-column: span 2;">
+            <span style="color:#cbd5e1;">সাধারণ মন্ডপ:</span>
+            <span class="national-val">৩১,৪৯৬ টি</span>
+          </div>
+        </div>
+      </div>
+
       <div class="filter-box">
         <select id="district-select" onchange="onSelectChange(this.value)">
           <option value="">-- জেলা বা মহানগর বেছে নিন --</option>
@@ -251,26 +334,26 @@
       "Barisal": { bn: "বরিশাল জেলা", total: 540, perm: 522, temp: 18, fam: 0, cctv_ok: 361, cctv_fail: 179, critical: 131, imp: 257, gen: 158 },
       "Manikganj": { bn: "মানিকগঞ্জ", total: 554, perm: 380, temp: 141, fam: 33, cctv_ok: 474, cctv_fail: 80, critical: 71, imp: 400, gen: 83 },
       "Narsingdi": { bn: "নরসিংদী", total: 360, perm: 101, temp: 240, fam: 19, cctv_ok: 209, cctv_fail: 151, critical: 20, imp: 31, gen: 309 },
-      "Rajbari": { bn: "রাজবাড়ী", total: 452, perm: 170, temp: 200, fam: 80, cctv_ok: 295, cctv_fail: 121, critical: 73, imp: 79, gen: 300 },
+      "Rajbari": { bn: "রাজবাড়ী", total: 452, perm: 170, temp: 200, fam: 80, cctv_ok: 295, cctv_fail: 121, critical: 73, imp: 79, gen: 300 },
       "Faridpur": { bn: "ফরিদপুর", total: 761, perm: 400, temp: 149, fam: 212, cctv_ok: 405, cctv_fail: 356, critical: 122, imp: 256, gen: 383 },
       "Gopalganj": { bn: "গোপালগঞ্জ", total: 1266, perm: 506, temp: 510, fam: 50, cctv_ok: 540, cctv_fail: 726, critical: 320, imp: 480, gen: 466 },
       "Munshiganj": { bn: "মুন্সিগঞ্জ", total: 365, perm: 347, temp: 17, fam: 1, cctv_ok: 358, cctv_fail: 7, critical: 63, imp: 92, gen: 210 },
       "Madaripur": { bn: "মাদারীপুর", total: 452, perm: 441, temp: 11, fam: 0, cctv_ok: 162, cctv_fail: 285, critical: 89, imp: 208, gen: 155 },
       "Tangail": { bn: "টাঙ্গাইল", total: 1294, perm: 811, temp: 414, fam: 69, cctv_ok: 1202, cctv_fail: 92, critical: 101, imp: 358, gen: 835 },
       "Kishoreganj": { bn: "কিশোরগঞ্জ", total: 407, perm: 127, temp: 260, fam: 20, cctv_ok: 367, cctv_fail: 40, critical: 70, imp: 80, gen: 257 },
-      "Shariatpur": { bn: "শরীয়তপুর", total: 102, perm: 90, temp: 12, fam: 0, cctv_ok: 101, cctv_fail: 1, critical: 1, imp: 59, gen: 42 },
-      "Narayanganj": { bn: "নারায়ণগঞ্জ", total: 240, perm: 144, temp: 90, fam: 6, cctv_ok: 159, cctv_fail: 81, critical: 54, imp: 91, gen: 95 },
-      "Mymensingh": { bn: "ময়মনসিংহ", total: 778, perm: 320, temp: 400, fam: 68, cctv_ok: 388, cctv_fail: 400, critical: 250, imp: 402, gen: 136 },
+      "Shariatpur": { bn: "শরীয়তপুর", total: 102, perm: 90, temp: 12, fam: 0, cctv_ok: 101, cctv_fail: 1, critical: 1, imp: 59, gen: 42 },
+      "Narayanganj": { bn: "নারায়ণগঞ্জ", total: 240, perm: 144, temp: 90, fam: 6, cctv_ok: 159, cctv_fail: 81, critical: 54, imp: 91, gen: 95 },
+      "Mymensingh": { bn: "ময়মনসিংহ", total: 778, perm: 320, temp: 400, fam: 68, cctv_ok: 388, cctv_fail: 400, critical: 250, imp: 402, gen: 136 },
       "Netrokona": { bn: "নেত্রকোনা", total: 526, perm: 268, temp: 188, fam: 70, cctv_ok: 340, cctv_fail: 186, critical: 170, imp: 168, gen: 188 },
       "Jamalpur": { bn: "জামালপুর", total: 228, perm: 117, temp: 110, fam: 1, cctv_ok: 85, cctv_fail: 143, critical: 2, imp: 155, gen: 71 },
       "Sherpur": { bn: "শেরপুর", total: 164, perm: 96, temp: 59, fam: 9, cctv_ok: 107, cctv_fail: 57, critical: 50, imp: 78, gen: 36 },
       "Comilla": { bn: "কুমিল্লা", total: 839, perm: 367, temp: 457, fam: 15, cctv_ok: 510, cctv_fail: 329, critical: 141, imp: 378, gen: 320 },
-      "Noakhali": { bn: "নোয়াখালী", total: 192, perm: 151, temp: 29, fam: 4, cctv_ok: 145, cctv_fail: 47, critical: 80, imp: 82, gen: 24 },
+      "Noakhali": { bn: "নোয়াখালী", total: 192, perm: 151, temp: 29, fam: 4, cctv_ok: 145, cctv_fail: 47, critical: 80, imp: 82, gen: 24 },
       "Feni": { bn: "ফেনী", total: 153, perm: 135, temp: 14, fam: 4, cctv_ok: 127, cctv_fail: 26, critical: 44, imp: 73, gen: 36 },
       "Lakshmipur": { bn: "লক্ষ্মীপুর", total: 79, perm: 71, temp: 5, fam: 3, cctv_ok: 68, cctv_fail: 11, critical: 25, imp: 26, gen: 28 },
       "Chandpur": { bn: "চাঁদপুর", total: 229, perm: 181, temp: 40, fam: 8, cctv_ok: 223, cctv_fail: 6, critical: 67, imp: 99, gen: 63 },
-      "Brahmanbaria": { bn: "ব্রাহ্মণবাড়িয়া", total: 606, perm: 236, temp: 340, fam: 30, cctv_ok: 409, cctv_fail: 197, critical: 93, imp: 255, gen: 258 },
-      "Khagrachhari": { bn: "খাগড়াছড়ি", total: 67, perm: 62, temp: 3, fam: 1, cctv_ok: 49, cctv_fail: 18, critical: 24, imp: 40, gen: 3 },
+      "Brahmanbaria": { bn: "ব্রাহ্মণবাড়িয়া", total: 606, perm: 236, temp: 340, fam: 30, cctv_ok: 409, cctv_fail: 197, critical: 93, imp: 255, gen: 258 },
+      "Khagrachhari": { bn: "খাগড়াছড়ি", total: 67, perm: 62, temp: 3, fam: 1, cctv_ok: 49, cctv_fail: 18, critical: 24, imp: 40, gen: 3 },
       "Rangamati": { bn: "রাঙ্গামাটি", total: 47, perm: 40, temp: 4, fam: 3, cctv_ok: 43, cctv_fail: 4, critical: 11, imp: 34, gen: 2 },
       "Bandarban": { bn: "বান্দরবান", total: 33, perm: 27, temp: 6, fam: 0, cctv_ok: 18, cctv_fail: 15, critical: 13, imp: 16, gen: 4 },
       "Cox's Bazar": { bn: "কক্সবাজার", total: 187, perm: 152, temp: 27, fam: 8, cctv_ok: 133, cctv_fail: 54, critical: 27, imp: 85, gen: 75 },
@@ -282,29 +365,29 @@
       "Natore": { bn: "নাটোর", total: 380, perm: 272, temp: 88, fam: 20, cctv_ok: 170, cctv_fail: 210, critical: 65, imp: 178, gen: 137 },
       "Pabna": { bn: "পাবনা", total: 359, perm: 280, temp: 11, fam: 68, cctv_ok: 302, cctv_fail: 57, critical: 61, imp: 68, gen: 230 },
       "Naogaon": { bn: "নওগাঁ", total: 807, perm: 758, temp: 43, fam: 6, cctv_ok: 357, cctv_fail: 450, critical: 162, imp: 187, gen: 21 },
-      "Joypurhat": { bn: "জয়পুরহাট", total: 302, perm: 269, temp: 33, fam: 0, cctv_ok: 10, cctv_fail: 292, critical: 35, imp: 65, gen: 202 },
-      "Bogura": { bn: "বগুড়া", total: 729, perm: 557, temp: 165, fam: 7, cctv_ok: 285, cctv_fail: 444, critical: 121, imp: 328, gen: 11 },
+      "Joypurhat": { bn: "জয়পুরহাট", total: 302, perm: 269, temp: 33, fam: 0, cctv_ok: 10, cctv_fail: 292, critical: 35, imp: 65, gen: 202 },
+      "Bogura": { bn: "বগুড়া", total: 729, perm: 557, temp: 165, fam: 7, cctv_ok: 285, cctv_fail: 444, critical: 121, imp: 328, gen: 11 },
       "Dinajpur": { bn: "দিনাজপুর", total: 1291, perm: 1276, temp: 15, fam: 0, cctv_ok: 154, cctv_fail: 1137, critical: 229, imp: 361, gen: 701 },
-      "Panchagarh": { bn: "পঞ্চগড়", total: 299, perm: 290, temp: 9, fam: 1, cctv_ok: 107, cctv_fail: 192, critical: 74, imp: 96, gen: 129 },
+      "Panchagarh": { bn: "পঞ্চগড়", total: 299, perm: 290, temp: 9, fam: 1, cctv_ok: 107, cctv_fail: 192, critical: 74, imp: 96, gen: 129 },
       "Thakurgaon": { bn: "ঠাকুরগাঁও", total: 474, perm: 459, temp: 13, fam: 2, cctv_ok: 349, cctv_fail: 125, critical: 121, imp: 116, gen: 237 },
       "Lalmonirhat": { bn: "লালমনিরহাট", total: 475, perm: 468, temp: 7, fam: 0, cctv_ok: 376, cctv_fail: 99, critical: 120, imp: 136, gen: 219 },
-      "Kurigram": { bn: "কুড়িগ্রাম", total: 526, perm: 468, temp: 58, fam: 0, cctv_ok: 384, cctv_fail: 142, critical: 114, imp: 163, gen: 249 },
+      "Kurigram": { bn: "কুড়িগ্রাম", total: 526, perm: 468, temp: 58, fam: 0, cctv_ok: 384, cctv_fail: 142, critical: 114, imp: 163, gen: 249 },
       "Nilphamari": { bn: "নীলফামারী", total: 849, perm: 661, temp: 186, fam: 2, cctv_ok: 522, cctv_fail: 327, critical: 102, imp: 207, gen: 540 },
       "Gaibandha": { bn: "গাইবান্ধা", total: 592, perm: 404, temp: 188, fam: 0, cctv_ok: 291, cctv_fail: 301, critical: 97, imp: 161, gen: 334 },
       "Bagerhat": { bn: "বাগেরহাট", total: 606, perm: 551, temp: 41, fam: 14, cctv_ok: 310, cctv_fail: 296, critical: 111, imp: 184, gen: 311 },
-      "Narail": { bn: "নড়াইল", total: 526, perm: 452, temp: 60, fam: 14, cctv_ok: 176, cctv_fail: 350, critical: 108, imp: 300, gen: 118 },
+      "Narail": { bn: "নড়াইল", total: 526, perm: 452, temp: 60, fam: 14, cctv_ok: 176, cctv_fail: 350, critical: 108, imp: 300, gen: 118 },
       "Satkhira": { bn: "সাতক্ষীরা", total: 591, perm: 578, temp: 13, fam: 5, cctv_ok: 538, cctv_fail: 53, critical: 91, imp: 141, gen: 259 },
       "Magura": { bn: "মাগুরা", total: 644, perm: 560, temp: 56, fam: 28, cctv_ok: 523, cctv_fail: 121, critical: 38, imp: 316, gen: 290 },
       "Jessore": { bn: "যশোর", total: 749, perm: 697, temp: 48, fam: 4, cctv_ok: 578, cctv_fail: 171, critical: 129, imp: 225, gen: 395 },
-      "Kushtia": { bn: "কুষ্টিয়া", total: 256, perm: 224, temp: 31, fam: 1, cctv_ok: 240, cctv_fail: 16, critical: 65, imp: 92, gen: 99 },
-      "Chuadanga": { bn: "চুয়াডাঙ্গা", total: 118, perm: 95, temp: 23, fam: 0, cctv_ok: 96, cctv_fail: 22, critical: 18, imp: 38, gen: 62 },
+      "Kushtia": { bn: "কুষ্টিয়া", total: 256, perm: 224, temp: 31, fam: 1, cctv_ok: 240, cctv_fail: 16, critical: 65, imp: 92, gen: 99 },
+      "Chuadanga": { bn: "চুয়াডাঙ্গা", total: 118, perm: 95, temp: 23, fam: 0, cctv_ok: 96, cctv_fail: 22, critical: 18, imp: 38, gen: 62 },
       "Meherpur": { bn: "মেহেরপুর", total: 42, perm: 31, temp: 11, fam: 0, cctv_ok: 30, cctv_fail: 12, critical: 10, imp: 15, gen: 17 },
       "Jhenaidah": { bn: "ঝিনাইদহ", total: 465, perm: 431, temp: 28, fam: 6, cctv_ok: 245, cctv_fail: 211, critical: 51, imp: 111, gen: 303 },
       "Bhola": { bn: "ভোলা", total: 116, perm: 100, temp: 12, fam: 4, cctv_ok: 89, cctv_fail: 27, critical: 37, imp: 36, gen: 44 },
       "Pirojpur": { bn: "পিরোজপুর", total: 462, perm: 434, temp: 15, fam: 13, cctv_ok: 379, cctv_fail: 83, critical: 88, imp: 157, gen: 217 },
       "Barguna": { bn: "বরগুনা", total: 141, perm: 138, temp: 1, fam: 2, cctv_ok: 139, cctv_fail: 2, critical: 26, imp: 44, gen: 71 },
       "Jhalokati": { bn: "ঝালকাঠি", total: 158, perm: 110, temp: 33, fam: 15, cctv_ok: 156, cctv_fail: 2, critical: 36, imp: 32, gen: 90 },
-      "Patuakhali": { bn: "পটুয়াখালী", total: 191, perm: 160, temp: 31, fam: 0, cctv_ok: 164, cctv_fail: 27, critical: 38, imp: 100, gen: 52 }
+      "Patuakhali": { bn: "পটুয়াখালী", total: 191, perm: 160, temp: 31, fam: 0, cctv_ok: 164, cctv_fail: 27, critical: 38, imp: 100, gen: 52 }
     };
 
     // ৮টি মহানগরীর স্বতন্ত্র ডাটা
