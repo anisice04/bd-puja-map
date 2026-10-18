@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>বাংলাদেশ পূজা মন্ডপ ২০২৬ জেলা মানচিত্র</title>
+  <title>বাংলাদেশ পূজা মন্ডপ ২০২৬ - জেলা ও মহানগর পরিসংখ্যান</title>
   
-  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
   
   <style>
@@ -21,7 +20,7 @@
     }
     header {
       background: #ffffff;
-      padding: 12px 24px;
+      padding: 10px 20px;
       border-bottom: 2px solid #e2e8f0;
       display: flex;
       justify-content: space-between;
@@ -30,7 +29,7 @@
       z-index: 1000;
     }
     header h1 {
-      font-size: 19px;
+      font-size: 18px;
       color: #991b1b;
       font-weight: 700;
     }
@@ -45,147 +44,211 @@
       height: 100%;
       background: #ffffff;
     }
-    /* জেলার স্থায়ী টেক্সট লেবেল (আপনার ছবির মতো) */
     .district-label {
       background: transparent !important;
       border: none !important;
       box-shadow: none !important;
-      font-size: 11px !important;
+      font-size: 10.5px !important;
       font-weight: 700 !important;
       color: #0f172a !important;
       text-shadow: 1.5px 1.5px 2px #fff, -1.5px -1.5px 2px #fff, 0 0 3px #fff !important;
       pointer-events: none;
     }
-    /* সাইডবার ডাটা কার্ড */
+    /* মহানগরের জন্য স্পেশাল মার্কার স্টাইল */
+    .metro-icon {
+      background: #dc2626;
+      color: #ffffff;
+      border: 2px solid #ffffff;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: bold;
+      text-align: center;
+      line-height: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .metro-icon:hover {
+      transform: scale(1.15);
+      background: #991b1b;
+    }
+    /* সাইডবার */
     .sidebar {
-      width: 360px;
+      width: 380px;
       background: #ffffff;
       border-left: 1px solid #cbd5e1;
-      padding: 20px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       box-shadow: -4px 0 16px rgba(0,0,0,0.05);
       overflow-y: auto;
       z-index: 1000;
+    }
+    .filter-box {
+      margin-bottom: 4px;
+    }
+    .filter-box select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #1e293b;
+      outline: none;
+      background: #f8fafc;
+    }
+    /* ট্যাব বাটন (জেলা / মহানগর / মোট) */
+    .tab-group {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 6px 4px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid #cbd5e1;
+      background: #f1f5f9;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #475569;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .tab-btn.active {
+      background: #991b1b;
+      color: #ffffff;
+      border-color: #991b1b;
     }
     .card {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       border-radius: 10px;
-      padding: 16px;
+      padding: 14px;
     }
     .card h2 {
-      font-size: 18px;
+      font-size: 17px;
       color: #991b1b;
       border-bottom: 2px solid #fee2e2;
-      padding-bottom: 6px;
-      margin-bottom: 12px;
+      padding-bottom: 4px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .card h3 {
-      font-size: 14.5px;
-      color: #1e293b;
-      border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 6px;
-      margin-bottom: 12px;
+    .badge-type {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: #e2e8f0;
+      color: #475569;
     }
     .stat-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 7px 0;
+      padding: 6px 0;
       border-bottom: 1px dashed #cbd5e1;
-      font-size: 13.5px;
+      font-size: 13px;
     }
     .stat-row:last-child { border-bottom: none; }
     .stat-title { color: #64748b; }
     .stat-val { font-weight: 700; color: #0f172a; }
-    .val-total { color: #d97706 !important; font-size: 17px; }
-    .val-crit { color: #dc2626 !important; font-size: 16px; }
+    .val-total { color: #d97706 !important; font-size: 16px; }
+    .val-crit { color: #dc2626 !important; font-size: 15px; }
     .val-ok { color: #16a34a !important; }
     .val-fail { color: #dc2626 !important; }
-    
-    #loading-msg {
-      position: absolute;
-      top: 50%;
-      left: 40%;
-      transform: translate(-50%, -50%);
-      background: rgba(15, 23, 42, 0.85);
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-size: 14px;
-      z-index: 2000;
-    }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>দুর্গাপূজা ২০২৬ মন্ডপ পরিসংখ্যান (বাংলাদেশ জেলা মানচিত্র)</h1>
-    <div style="font-size: 13px; color: #64748b; font-weight: 500;">যেকোনো জেলার ওপর মাউস নিন</div>
+    <h1>দুর্গাপূজা ২০২৬ মন্ডপ পরিসংখ্যান (জেলা ও মহানগর ভিত্তিক)</h1>
+    <div style="font-size: 12.5px; color: #64748b; font-weight: 500;">মহানগর দেখতে লাল ব্যাজে ক্লিক বা ড্রপডাউন সিলেক্ট করুন</div>
   </header>
 
   <div class="main-container">
-    <div id="loading-msg">মানচিত্র প্রস্তুত হচ্ছে...</div>
     <div id="map"></div>
 
-    <!-- সাইডবার ডাটা কার্ড -->
     <div class="sidebar">
+      <div class="filter-box">
+        <select id="district-select" onchange="onSelectChange(this.value)">
+          <option value="">-- জেলা বা মহানগর বেছে নিন --</option>
+        </select>
+      </div>
+
+      <!-- জেলা ও মহানগর আলাদা দেখার ট্যাব -->
+      <div class="tab-group" id="tab-container" style="display: none;">
+        <button class="tab-btn active" id="tab-all" onclick="switchView('combined')">একত্রে (মোট)</button>
+        <button class="tab-btn" id="tab-dist" onclick="switchView('district')">শুধু জেলা</button>
+        <button class="tab-btn" id="tab-metro" onclick="switchView('metro')">শুধু মহানগর</button>
+      </div>
+
       <div class="card">
-        <h2 id="d-name">ঢাকা জেলা</h2>
+        <h2>
+          <span id="d-name">ঢাকা</span>
+          <span id="d-type" class="badge-type">জেলা ও মহানগর</span>
+        </h2>
         <div class="stat-row">
           <span class="stat-title">মোট পূজা মন্ডপ</span>
-          <span id="d-total" class="stat-val val-total">769 টি</span>
+          <span id="d-total" class="stat-val val-total">১৩৫৭ টি</span>
         </div>
         <div class="stat-row">
           <span class="stat-title">স্থায়ী মন্ডপ</span>
-          <span id="d-perm" class="stat-val">624 টি</span>
+          <span id="d-perm" class="stat-val">৮৭০ টি</span>
         </div>
         <div class="stat-row">
           <span class="stat-title">অস্থায়ী মন্ডপ</span>
-          <span id="d-temp" class="stat-val">100 টি</span>
+          <span id="d-temp" class="stat-val">৩৯২ টি</span>
         </div>
         <div class="stat-row">
           <span class="stat-title">পারিবারিক মন্ডপ</span>
-          <span id="d-fam" class="stat-val">45 টি</span>
+          <span id="d-fam" class="stat-val">৯৫ টি</span>
         </div>
       </div>
 
       <div class="card">
-        <h3>সিসিটিভি ও নিরাপত্তা ক্যাটাগরি</h3>
+        <h3 style="font-size: 14px; color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 8px;">সিসিটিভি ও নিরাপত্তা ক্যাটাগরি</h3>
         <div class="stat-row">
           <span class="stat-title">সিসি ক্যামেরা সচল</span>
-          <span id="d-cctv-ok" class="stat-val val-ok">683 টি</span>
+          <span id="d-cctv-ok" class="stat-val val-ok">৯৩১ টি</span>
         </div>
         <div class="stat-row">
           <span class="stat-title">সিসি ক্যামেরা অচল/নাই</span>
-          <span id="d-cctv-fail" class="stat-val val-fail">85 টি</span>
+          <span id="d-cctv-fail" class="stat-val val-fail">৪২৫ টি</span>
         </div>
         <div class="stat-row">
           <span class="stat-title">অতি গুরুত্বপূর্ণ</span>
-          <span id="d-critical" class="stat-val val-crit">72 টি</span>
+          <span id="d-critical" class="stat-val val-crit">২৪২ টি</span>
         </div>
         <div class="stat-row">
           <span class="stat-title">গুরুত্বপূর্ণ মন্ডপ</span>
-          <span id="d-imp" class="stat-val">252 টি</span>
+          <span id="d-imp" class="stat-val">৪৫২ টি</span>
         </div>
         <div class="stat-row">
           <span class="stat-title">সাধারণ মন্ডপ</span>
-          <span id="d-gen" class="stat-val">445 টি</span>
+          <span id="d-gen" class="stat-val">৬৬৩ টি</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Leaflet JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 
   <script>
-    // দুর্গাপূজা ২০২৬ সম্পূর্ণ জেলা ডাটা
-    const dataStore = {
-      "Dhaka": { bn: "ঢাকা", total: 769, perm: 624, temp: 100, fam: 45, cctv_ok: 683, cctv_fail: 85, critical: 72, imp: 252, gen: 445 },
-      "Gazipur": { bn: "গাজীপুর", total: 335, perm: 119, temp: 112, fam: 4, cctv_ok: 22, cctv_fail: 115, critical: 80, imp: 138, gen: 117 },
+    // জেলা ও মহানগর আলাদা সংরক্ষিত সম্পূর্ণ ডাটাবেজ
+    const districtData = {
+      "Dhaka": { bn: "ঢাকা জেলা", total: 769, perm: 624, temp: 100, fam: 45, cctv_ok: 683, cctv_fail: 85, critical: 72, imp: 252, gen: 445 },
+      "Gazipur": { bn: "গাজীপুর জেলা", total: 335, perm: 119, temp: 112, fam: 4, cctv_ok: 22, cctv_fail: 115, critical: 80, imp: 138, gen: 117 },
+      "Chattogram": { bn: "চট্টগ্রাম জেলা", total: 2218, perm: 1898, temp: 259, fam: 61, cctv_ok: 1815, cctv_fail: 403, critical: 562, imp: 584, gen: 107 },
+      "Sylhet": { bn: "সিলেট জেলা", total: 459, perm: 277, temp: 169, fam: 13, cctv_ok: 360, cctv_fail: 152, critical: 94, imp: 148, gen: 217 },
+      "Rajshahi": { bn: "রাজশাহী জেলা", total: 335, perm: 315, temp: 19, fam: 1, cctv_ok: 175, cctv_fail: 160, critical: 52, imp: 111, gen: 172 },
+      "Rangpur": { bn: "রংপুর জেলা", total: 741, perm: 411, temp: 321, fam: 9, cctv_ok: 362, cctv_fail: 379, critical: 100, imp: 241, gen: 400 },
+      "Khulna": { bn: "খুলনা জেলা", total: 814, perm: 724, temp: 90, fam: 0, cctv_ok: 496, cctv_fail: 318, critical: 94, imp: 233, gen: 487 },
+      "Barisal": { bn: "বরিশাল জেলা", total: 540, perm: 522, temp: 18, fam: 0, cctv_ok: 361, cctv_fail: 179, critical: 131, imp: 257, gen: 158 },
       "Manikganj": { bn: "মানিকগঞ্জ", total: 554, perm: 380, temp: 141, fam: 33, cctv_ok: 474, cctv_fail: 80, critical: 71, imp: 400, gen: 83 },
       "Narsingdi": { bn: "নরসিংদী", total: 360, perm: 101, temp: 240, fam: 19, cctv_ok: 209, cctv_fail: 151, critical: 20, imp: 31, gen: 309 },
       "Rajbari": { bn: "রাজবাড়ী", total: 452, perm: 170, temp: 200, fam: 80, cctv_ok: 295, cctv_fail: 121, critical: 73, imp: 79, gen: 300 },
@@ -201,7 +264,6 @@
       "Netrokona": { bn: "নেত্রকোনা", total: 526, perm: 268, temp: 188, fam: 70, cctv_ok: 340, cctv_fail: 186, critical: 170, imp: 168, gen: 188 },
       "Jamalpur": { bn: "জামালপুর", total: 228, perm: 117, temp: 110, fam: 1, cctv_ok: 85, cctv_fail: 143, critical: 2, imp: 155, gen: 71 },
       "Sherpur": { bn: "শেরপুর", total: 164, perm: 96, temp: 59, fam: 9, cctv_ok: 107, cctv_fail: 57, critical: 50, imp: 78, gen: 36 },
-      "Chattogram": { bn: "চট্টগ্রাম", total: 2218, perm: 1898, temp: 259, fam: 61, cctv_ok: 1815, cctv_fail: 403, critical: 562, imp: 584, gen: 107 },
       "Comilla": { bn: "কুমিল্লা", total: 839, perm: 367, temp: 457, fam: 15, cctv_ok: 510, cctv_fail: 329, critical: 141, imp: 378, gen: 320 },
       "Noakhali": { bn: "নোয়াখালী", total: 192, perm: 151, temp: 29, fam: 4, cctv_ok: 145, cctv_fail: 47, critical: 80, imp: 82, gen: 24 },
       "Feni": { bn: "ফেনী", total: 153, perm: 135, temp: 14, fam: 4, cctv_ok: 127, cctv_fail: 26, critical: 44, imp: 73, gen: 36 },
@@ -212,19 +274,16 @@
       "Rangamati": { bn: "রাঙ্গামাটি", total: 47, perm: 40, temp: 4, fam: 3, cctv_ok: 43, cctv_fail: 4, critical: 11, imp: 34, gen: 2 },
       "Bandarban": { bn: "বান্দরবান", total: 33, perm: 27, temp: 6, fam: 0, cctv_ok: 18, cctv_fail: 15, critical: 13, imp: 16, gen: 4 },
       "Cox's Bazar": { bn: "কক্সবাজার", total: 187, perm: 152, temp: 27, fam: 8, cctv_ok: 133, cctv_fail: 54, critical: 27, imp: 85, gen: 75 },
-      "Sylhet": { bn: "সিলেট", total: 459, perm: 277, temp: 169, fam: 13, cctv_ok: 360, cctv_fail: 152, critical: 94, imp: 148, gen: 217 },
       "Sunamganj": { bn: "সুনামগঞ্জ", total: 441, perm: 249, temp: 177, fam: 20, cctv_ok: 352, cctv_fail: 89, critical: 102, imp: 181, gen: 158 },
       "Moulvibazar": { bn: "মৌলভীবাজার", total: 1000, perm: 494, temp: 329, fam: 177, cctv_ok: 414, cctv_fail: 586, critical: 69, imp: 200, gen: 731 },
       "Habiganj": { bn: "হবিগঞ্জ", total: 667, perm: 364, temp: 284, fam: 9, cctv_ok: 409, cctv_fail: 257, critical: 137, imp: 169, gen: 361 },
-      "Rajshahi": { bn: "রাজশাহী", total: 335, perm: 315, temp: 19, fam: 1, cctv_ok: 175, cctv_fail: 160, critical: 52, imp: 111, gen: 172 },
-      "ChapaiNawabganj": { bn: "চাঁপাইনবাবগঞ্জ", total: 165, perm: 139, temp: 25, fam: 1, cctv_ok: 137, cctv_fail: 28, critical: 45, imp: 55, gen: 65 },
+      "chapaiNawabganj": { bn: "চাঁপাইনবাবগঞ্জ", total: 165, perm: 139, temp: 25, fam: 1, cctv_ok: 137, cctv_fail: 28, critical: 45, imp: 55, gen: 65 },
       "Sirajganj": { bn: "সিরাজগঞ্জ", total: 544, perm: 419, temp: 117, fam: 8, cctv_ok: 264, cctv_fail: 280, critical: 141, imp: 201, gen: 202 },
       "Natore": { bn: "নাটোর", total: 380, perm: 272, temp: 88, fam: 20, cctv_ok: 170, cctv_fail: 210, critical: 65, imp: 178, gen: 137 },
       "Pabna": { bn: "পাবনা", total: 359, perm: 280, temp: 11, fam: 68, cctv_ok: 302, cctv_fail: 57, critical: 61, imp: 68, gen: 230 },
       "Naogaon": { bn: "নওগাঁ", total: 807, perm: 758, temp: 43, fam: 6, cctv_ok: 357, cctv_fail: 450, critical: 162, imp: 187, gen: 21 },
       "Joypurhat": { bn: "জয়পুরহাট", total: 302, perm: 269, temp: 33, fam: 0, cctv_ok: 10, cctv_fail: 292, critical: 35, imp: 65, gen: 202 },
       "Bogura": { bn: "বগুড়া", total: 729, perm: 557, temp: 165, fam: 7, cctv_ok: 285, cctv_fail: 444, critical: 121, imp: 328, gen: 11 },
-      "Rangpur": { bn: "রংপুর", total: 741, perm: 411, temp: 321, fam: 9, cctv_ok: 362, cctv_fail: 379, critical: 100, imp: 241, gen: 400 },
       "Dinajpur": { bn: "দিনাজপুর", total: 1291, perm: 1276, temp: 15, fam: 0, cctv_ok: 154, cctv_fail: 1137, critical: 229, imp: 361, gen: 701 },
       "Panchagarh": { bn: "পঞ্চগড়", total: 299, perm: 290, temp: 9, fam: 1, cctv_ok: 107, cctv_fail: 192, critical: 74, imp: 96, gen: 129 },
       "Thakurgaon": { bn: "ঠাকুরগাঁও", total: 474, perm: 459, temp: 13, fam: 2, cctv_ok: 349, cctv_fail: 125, critical: 121, imp: 116, gen: 237 },
@@ -232,7 +291,6 @@
       "Kurigram": { bn: "কুড়িগ্রাম", total: 526, perm: 468, temp: 58, fam: 0, cctv_ok: 384, cctv_fail: 142, critical: 114, imp: 163, gen: 249 },
       "Nilphamari": { bn: "নীলফামারী", total: 849, perm: 661, temp: 186, fam: 2, cctv_ok: 522, cctv_fail: 327, critical: 102, imp: 207, gen: 540 },
       "Gaibandha": { bn: "গাইবান্ধা", total: 592, perm: 404, temp: 188, fam: 0, cctv_ok: 291, cctv_fail: 301, critical: 97, imp: 161, gen: 334 },
-      "Khulna": { bn: "খুলনা", total: 814, perm: 724, temp: 90, fam: 0, cctv_ok: 496, cctv_fail: 318, critical: 94, imp: 233, gen: 487 },
       "Bagerhat": { bn: "বাগেরহাট", total: 606, perm: 551, temp: 41, fam: 14, cctv_ok: 310, cctv_fail: 296, critical: 111, imp: 184, gen: 311 },
       "Narail": { bn: "নড়াইল", total: 526, perm: 452, temp: 60, fam: 14, cctv_ok: 176, cctv_fail: 350, critical: 108, imp: 300, gen: 118 },
       "Satkhira": { bn: "সাতক্ষীরা", total: 591, perm: 578, temp: 13, fam: 5, cctv_ok: 538, cctv_fail: 53, critical: 91, imp: 141, gen: 259 },
@@ -242,7 +300,6 @@
       "Chuadanga": { bn: "চুয়াডাঙ্গা", total: 118, perm: 95, temp: 23, fam: 0, cctv_ok: 96, cctv_fail: 22, critical: 18, imp: 38, gen: 62 },
       "Meherpur": { bn: "মেহেরপুর", total: 42, perm: 31, temp: 11, fam: 0, cctv_ok: 30, cctv_fail: 12, critical: 10, imp: 15, gen: 17 },
       "Jhenaidah": { bn: "ঝিনাইদহ", total: 465, perm: 431, temp: 28, fam: 6, cctv_ok: 245, cctv_fail: 211, critical: 51, imp: 111, gen: 303 },
-      "Barisal": { bn: "বরিশাল", total: 540, perm: 522, temp: 18, fam: 0, cctv_ok: 361, cctv_fail: 179, critical: 131, imp: 257, gen: 158 },
       "Bhola": { bn: "ভোলা", total: 116, perm: 100, temp: 12, fam: 4, cctv_ok: 89, cctv_fail: 27, critical: 37, imp: 36, gen: 44 },
       "Pirojpur": { bn: "পিরোজপুর", total: 462, perm: 434, temp: 15, fam: 13, cctv_ok: 379, cctv_fail: 83, critical: 88, imp: 157, gen: 217 },
       "Barguna": { bn: "বরগুনা", total: 141, perm: 138, temp: 1, fam: 2, cctv_ok: 139, cctv_fail: 2, critical: 26, imp: 44, gen: 71 },
@@ -250,20 +307,22 @@
       "Patuakhali": { bn: "পটুয়াখালী", total: 191, perm: 160, temp: 31, fam: 0, cctv_ok: 164, cctv_fail: 27, critical: 38, imp: 100, gen: 52 }
     };
 
-    // আপনার রেফারেন্স ইমেজের মতো উজ্জ্বল পেস্টেল কালার
-    const colorPalette = [
-      '#e67e22', '#a0d468', '#70a1ff', '#ffd32a', '#e056fd', 
-      '#48dbfb', '#ff9f43', '#2ed573', '#feca57', '#81ecec', 
-      '#d2b48c', '#ffb8b8', '#badc58', '#95afc0', '#c7ecee'
-    ];
+    // ৮টি মহানগরীর স্বতন্ত্র ডাটা
+    const metroData = {
+      "Dhaka": { bn: "ঢাকা মহানগর", total: 588, perm: 246, temp: 292, fam: 50, cctv_ok: 248, cctv_fail: 340, critical: 170, imp: 200, gen: 218, lat: 23.78, lng: 90.41 },
+      "Gazipur": { bn: "গাজীপুর মহানগর", total: 122, perm: 71, temp: 47, fam: 4, cctv_ok: 121, cctv_fail: 1, critical: 28, imp: 60, gen: 66, lat: 23.99, lng: 90.42 },
+      "Chittagong": { bn: "চট্টগ্রাম মহানগর", total: 277, perm: 143, temp: 109, fam: 25, cctv_ok: 249, cctv_fail: 28, critical: 100, imp: 119, gen: 58, lat: 22.35, lng: 91.82 },
+      "Sylhet": { bn: "সিলেট মহানগর", total: 162, perm: 99, temp: 40, fam: 23, cctv_ok: 135, cctv_fail: 27, critical: 44, imp: 51, gen: 95, lat: 24.89, lng: 91.87 },
+      "Rajshahi": { bn: "রাজশাহী মহানগর", total: 109, perm: 60, temp: 44, fam: 5, cctv_ok: 46, cctv_fail: 63, critical: 14, imp: 70, gen: 25, lat: 24.37, lng: 88.60 },
+      "Rangpur": { bn: "রংপুর মহানগর", total: 170, perm: 134, temp: 34, fam: 2, cctv_ok: 91, cctv_fail: 79, critical: 9, imp: 57, gen: 104, lat: 25.75, lng: 89.24 },
+      "Khulna": { bn: "খুলনা মহানগর", total: 119, perm: 98, temp: 21, fam: 0, cctv_ok: 97, cctv_fail: 22, critical: 56, imp: 48, gen: 15, lat: 22.84, lng: 89.54 },
+      "Barisal": { bn: "বরিশাল মহানগর", total: 88, perm: 85, temp: 1, fam: 2, cctv_ok: 70, cctv_fail: 18, critical: 39, imp: 45, gen: 4, lat: 22.70, lng: 90.36 }
+    };
 
-    function getColor(str) {
-      let hash = 0;
-      for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
-      return colorPalette[Math.abs(hash) % colorPalette.length];
-    }
+    let currentSelectedKey = "Dhaka";
+    let currentMode = "combined"; // 'combined', 'district', 'metro'
 
-    // Leaflet ম্যাপ তৈরি (কোনো ব্যাকগ্রাউন্ড টাইলস ছাড়াই, একদম ক্লিন হোয়াইট ক্যানভাস)
+    // ম্যাপ তৈরি
     const map = L.map('map', {
       center: [23.85, 90.2],
       zoom: 7.2,
@@ -271,98 +330,172 @@
       attributionControl: false
     });
 
+    const colors = ['#e67e22', '#a0d468', '#70a1ff', '#ffd32a', '#e056fd', '#48dbfb', '#ff9f43', '#2ed573', '#feca57', '#81ecec', '#d2b48c', '#badc58'];
+    function getColor(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      return colors[Math.abs(hash) % colors.length];
+    }
+
+    // ড্রপডাউন পপুলেট
+    const selectElem = document.getElementById('district-select');
+    // প্রথমে মহানগরগুলো যুক্ত
+    const optGroupMetro = document.createElement('optgroup');
+    optGroupMetro.label = "--- মহানগরসমূহ ---";
+    Object.keys(metroData).forEach(k => {
+      const opt = document.createElement('option');
+      opt.value = "metro:" + k;
+      opt.innerText = metroData[k].bn;
+      optGroupMetro.appendChild(opt);
+    });
+    selectElem.appendChild(optGroupMetro);
+
+    // তারপর জেলাসমূহ যুক্ত
+    const optGroupDist = document.createElement('optgroup');
+    optGroupDist.label = "--- জেলাসমূহ ---";
+    Object.keys(districtData).sort().forEach(k => {
+      const opt = document.createElement('option');
+      opt.value = "dist:" + k;
+      opt.innerText = districtData[k].bn;
+      optGroupDist.appendChild(opt);
+    });
+    selectElem.appendChild(optGroupDist);
+
+    function renderDisplay(data, typeTitle) {
+      document.getElementById('d-name').innerText = data.bn;
+      document.getElementById('d-type').innerText = typeTitle;
+      document.getElementById('d-total').innerText = data.total + " টি";
+      document.getElementById('d-perm').innerText = data.perm + " টি";
+      document.getElementById('d-temp').innerText = data.temp + " টি";
+      document.getElementById('d-fam').innerText = data.fam + " টি";
+      document.getElementById('d-cctv-ok').innerText = data.cctv_ok + " টি";
+      document.getElementById('d-cctv-fail').innerText = data.cctv_fail + " টি";
+      document.getElementById('d-critical').innerText = data.critical + " টি";
+      document.getElementById('d-imp').innerText = data.imp + " টি";
+      document.getElementById('d-gen').innerText = data.gen + " টি";
+    }
+
     function updateDetails(key) {
-      let matchedKey = Object.keys(dataStore).find(k => k.toLowerCase() === key.toLowerCase().replace(" district", ""));
-      const item = dataStore[matchedKey] || { bn: key, total: 0, perm: 0, temp: 0, fam: 0, cctv_ok: 0, cctv_fail: 0, critical: 0, imp: 0, gen: 0 };
-      
-      document.getElementById('d-name').innerText = (item.bn || key) + " জেলা";
-      document.getElementById('d-total').innerText = item.total + " টি";
-      document.getElementById('d-perm').innerText = item.perm + " টি";
-      document.getElementById('d-temp').innerText = item.temp + " টি";
-      document.getElementById('d-fam').innerText = item.fam + " টি";
-      document.getElementById('d-cctv-ok').innerText = item.cctv_ok + " টি";
-      document.getElementById('d-cctv-fail').innerText = item.cctv_fail + " টি";
-      document.getElementById('d-critical').innerText = item.critical + " টি";
-      document.getElementById('d-imp').innerText = item.imp + " টি";
-      document.getElementById('d-gen').innerText = item.gen + " টি";
-    }
+      currentSelectedKey = key;
+      const tabGroup = document.getElementById('tab-container');
+      const hasMetro = !!metroData[key];
 
-    let geojsonLayer;
-
-    function highlightFeature(e) {
-      const layer = e.target;
-      layer.setStyle({
-        weight: 3.5,
-        color: '#0f172a',
-        fillOpacity: 0.95
-      });
-      layer.bringToFront();
-      const name = layer.feature.properties.ADM2_EN || layer.feature.properties.NAME_2 || layer.feature.properties.district || layer.feature.properties.name;
-      updateDetails(name);
-    }
-
-    function resetHighlight(e) {
-      geojsonLayer.resetStyle(e.target);
-    }
-
-    function onEachFeature(feature, layer) {
-      const name = feature.properties.ADM2_EN || feature.properties.NAME_2 || feature.properties.district || feature.properties.name || "District";
-      
-      // মানচিত্রের মাঝখানে জেলার পরিষ্কার নাম
-      layer.bindTooltip(name, {
-        permanent: true,
-        direction: "center",
-        className: "district-label"
-      });
-
-      layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
-        click: (e) => map.fitBounds(e.target.getBounds())
-      });
-    }
-
-    function renderMap(geoData) {
-      document.getElementById('loading-msg').style.display = 'none';
-      geojsonLayer = L.geoJson(geoData, {
-        style: function(feat) {
-          const name = feat.properties.ADM2_EN || feat.properties.NAME_2 || feat.properties.district || feat.properties.name || "";
-          return {
-            fillColor: getColor(name),
-            weight: 1.5,
-            opacity: 1,
-            color: '#ffffff',
-            fillOpacity: 0.85
-          };
-        },
-        onEachFeature: onEachFeature
-      }).addTo(map);
-
-      map.fitBounds(geojsonLayer.getBounds());
-    }
-
-    // শক্তিশালী মাল্টি-সোর্স লোডার (কোনো CORS বা নেটওয়ার্ক ব্লকে আটকাবে না)
-    const sources = [
-      'https://raw.githubusercontent.com/ahnaf-tahmid-chowdhury/Choropleth-Bangladesh/master/bangladesh_geojson_adm2_64_districts_zillas.json',
-      'https://cdn.jsdelivr.net/gh/ahnaf-tahmid-chowdhury/Choropleth-Bangladesh@master/bangladesh_geojson_adm2_64_districts_zillas.json',
-      'https://raw.githubusercontent.com/wmgeolab/geoBoundaries/9469f09/releaseData/gbOpen/BGD/ADM2/geoBoundaries-BGD-ADM2_simplified.geojson'
-    ];
-
-    function tryFetch(index) {
-      if (index >= sources.length) {
-        document.getElementById('loading-msg').innerText = "মানচিত্র লোড করতে সমস্যা হয়েছে। ইন্টারনেট চালু আছে কি না দেখুন।";
-        return;
+      if (hasMetro) {
+        tabGroup.style.display = 'flex';
+        switchView(currentMode);
+      } else {
+        tabGroup.style.display = 'none';
+        const d = districtData[key] || { bn: key, total: 0, perm: 0, temp: 0, fam: 0, cctv_ok: 0, cctv_fail: 0, critical: 0, imp: 0, gen: 0 };
+        renderDisplay(d, "জেলা");
       }
-      fetch(sources[index])
-        .then(r => {
-          if (!r.ok) throw new Error();
-          return r.json();
-        })
-        .then(data => renderMap(data))
-        .catch(() => tryFetch(index + 1));
     }
 
-    tryFetch(0);
+    function switchView(mode) {
+      currentMode = mode;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+      const dist = districtData[currentSelectedKey] || { total:0, perm:0, temp:0, fam:0, cctv_ok:0, cctv_fail:0, critical:0, imp:0, gen:0 };
+      const metro = metroData[currentSelectedKey] || { total:0, perm:0, temp:0, fam:0, cctv_ok:0, cctv_fail:0, critical:0, imp:0, gen:0 };
+
+      if (mode === 'district') {
+        document.getElementById('tab-dist').classList.add('active');
+        renderDisplay(dist, "শুধু জেলা অংশ");
+      } else if (mode === 'metro') {
+        document.getElementById('tab-metro').classList.add('active');
+        renderDisplay(metro, "শুধু মহানগর অংশ");
+      } else {
+        document.getElementById('tab-all').classList.add('active');
+        const combined = {
+          bn: dist.bn.replace(" জেলা", "") + " (জেলা ও মহানগর)",
+          total: dist.total + metro.total,
+          perm: dist.perm + metro.perm,
+          temp: dist.temp + metro.temp,
+          fam: dist.fam + metro.fam,
+          cctv_ok: dist.cctv_ok + metro.cctv_ok,
+          cctv_fail: dist.cctv_fail + metro.cctv_fail,
+          critical: dist.critical + metro.critical,
+          imp: dist.imp + metro.imp,
+          gen: dist.gen + metro.gen
+        };
+        renderDisplay(combined, "সর্বমোট");
+      }
+    }
+
+    function onSelectChange(val) {
+      if (!val) return;
+      const [type, key] = val.split(':');
+      currentSelectedKey = key;
+      if (type === 'metro') {
+        switchView('metro');
+        map.setView([metroData[key].lat, metroData[key].lng], 9);
+      } else {
+        updateDetails(key);
+      }
+    }
+
+    // মহানগরীর মার্কারসমূহ ম্যাপে স্থাপন
+    Object.keys(metroData).forEach(k => {
+      const m = metroData[k];
+      const customIcon = L.divIcon({
+        className: 'metro-icon',
+        html: 'মহানগর',
+        iconSize: [44, 20],
+        iconAnchor: [22, 10]
+      });
+
+      const marker = L.marker([m.lat, m.lng], { icon: customIcon }).addTo(map);
+      marker.bindPopup(`<b>${m.bn}</b><br>মোট মন্ডপ: ${m.total} টি`);
+      marker.on('click', () => {
+        currentSelectedKey = k;
+        document.getElementById('district-select').value = "metro:" + k;
+        switchView('metro');
+      });
+    });
+
+    // জেলা মানচিত্রের GeoJSON লোডার
+    fetch('https://raw.githubusercontent.com/ahnaf-tahmid-chowdhury/Choropleth-Bangladesh/master/bangladesh_geojson_adm2_64_districts_zillas.json')
+      .then(r => r.json())
+      .then(geoData => {
+        L.geoJson(geoData, {
+          style: function(feat) {
+            const name = feat.properties.ADM2_EN || feat.properties.NAME_2 || feat.properties.district || feat.properties.name || "";
+            return {
+              fillColor: getColor(name),
+              weight: 1.5,
+              opacity: 1,
+              color: '#ffffff',
+              fillOpacity: 0.85
+            };
+          },
+          onEachFeature: function(feature, layer) {
+            const name = feature.properties.ADM2_EN || feature.properties.NAME_2 || feature.properties.district || feature.properties.name || "";
+            layer.bindTooltip(name, {
+              permanent: true,
+              direction: "center",
+              className: "district-label"
+            });
+
+            layer.on({
+              mouseover: function(e) {
+                const targetLayer = e.target;
+                targetLayer.setStyle({ weight: 3.5, color: '#0f172a', fillOpacity: 0.95 });
+                targetLayer.bringToFront();
+                let matchedKey = Object.keys(districtData).find(k => k.toLowerCase() === name.toLowerCase().replace(" district", ""));
+                if (matchedKey) updateDetails(matchedKey);
+              },
+              mouseout: function(e) {
+                e.target.setStyle({ weight: 1.5, color: '#ffffff', fillOpacity: 0.85 });
+              },
+              click: function(e) {
+                map.fitBounds(e.target.getBounds());
+              }
+            });
+          }
+        }).addTo(map);
+      });
+
+    // প্রাথমিক লোড
+    updateDetails("Dhaka");
   </script>
 </body>
 </html>
